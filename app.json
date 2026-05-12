@@ -1,0 +1,6 @@
+{
+  "name": "Pipeline CRM",
+  "description": "Full-service CRM with contacts, deals pipeline, and activity tracking",
+  "entry": "/index.tsx",
+  "tables": ["contacts", "deals", "activities"]
+}
