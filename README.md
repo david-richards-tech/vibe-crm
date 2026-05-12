@@ -22,7 +22,9 @@ Start the Vite dev server with hot reload:
 npm run dev
 ```
 
-Vite will print a local URL (typically `http://localhost:5173`).
+Vite will print a local URL (typically `http://localhost:5173`). The app
+knows its own ID and the API host because the platform pre-fills them in
+`lib/config.ts` — no environment variables to set.
 
 ## Build
 

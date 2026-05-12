@@ -3,13 +3,26 @@
 // External apps have no platform JWT; the session lives in an HttpOnly
 // cookie. We pass `credentials: "include"` so the browser sends it on each
 // request. The backend resolves companyId from appId — we don't send one.
+//
+// Context source:
+//   Inside the platform preview, the bootstrap sets window.__APP__ via
+//   postMessage. Outside the platform (npm run dev / static deploy) we fall
+//   back to Vite env vars (VITE_APP_ID, VITE_API_HOSTNAME) — see README.md.
 
 declare global {
   interface Window {
-    __APP__: { appId: string; hostname: string };
+    __APP__?: { appId: string; hostname: string };
   }
 }
-const ctx = () => (window as any).__APP__;
+// /lib/config.ts is generated per-app with the real values baked in, so
+// `npm run dev` and production builds work with zero configuration. Inside
+// the platform preview, window.__APP__ takes precedence.
+import { APP_ID, API_HOSTNAME } from "./config";
+const ctx = (): { appId: string; hostname: string } => {
+  const platform = (window as any).__APP__;
+  if (platform && platform.appId && platform.hostname) return platform;
+  return { appId: APP_ID, hostname: API_HOSTNAME };
+};
 
 export async function listRows<T = any>(table: string, opts?: { limit?: number }): Promise<T[]> {
   const { hostname, appId } = ctx();

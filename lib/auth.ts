@@ -2,14 +2,25 @@
 //
 // Email + 6-digit code flow. `verifyCode` sets an HttpOnly session cookie
 // that authenticates subsequent /lib/api.ts calls.
+//
+// Context source: window.__APP__ inside the platform preview, otherwise
+// Vite env vars (VITE_APP_ID, VITE_API_HOSTNAME) — see README.md.
 
 declare global {
   interface Window {
-    __APP__: { appId: string; hostname: string };
+    __APP__?: { appId: string; hostname: string };
   }
 }
 export interface AppUser { id: string; email: string; }
-const ctx = () => (window as any).__APP__;
+// /lib/config.ts is generated per-app with the real values baked in, so
+// `npm run dev` and production builds work with zero configuration. Inside
+// the platform preview, window.__APP__ takes precedence.
+import { APP_ID, API_HOSTNAME } from "./config";
+const ctx = (): { appId: string; hostname: string } => {
+  const platform = (window as any).__APP__;
+  if (platform && platform.appId && platform.hostname) return platform;
+  return { appId: APP_ID, hostname: API_HOSTNAME };
+};
 const base = () => {
   const { hostname, appId } = ctx();
   return `${hostname}/apps/${appId}/auth`;
