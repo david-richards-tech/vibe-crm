@@ -1,6 +1,8 @@
 import React from "react";
 import { type AppUser } from "../lib/auth";
 import { type Page } from "../App";
+import { type Org } from "../lib/orgs";
+import OrgPicker from "./OrgPicker";
 import {
   LayoutDashboard,
   Users,
@@ -23,10 +25,13 @@ interface LayoutProps {
   page: Page;
   onNavigate: (p: Page) => void;
   onSignedOut: () => void;
+  activeOrgId: string | null;
+  orgs: Org[];
+  onOrgChanged: (activeOrgId: string | null, orgs: Org[]) => void;
   children: React.ReactNode;
 }
 
-export default function Layout({ user, page, onNavigate, onSignedOut, children }: LayoutProps) {
+export default function Layout({ user, page, onNavigate, onSignedOut, activeOrgId, orgs, onOrgChanged, children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
   const activeKind = page.kind === "contact-detail" ? "contacts" : page.kind;
 
@@ -65,7 +70,10 @@ export default function Layout({ user, page, onNavigate, onSignedOut, children }
 
   const userSection = (
     <div className="px-4 pb-4 pt-3 border-t border-white/10 mt-auto">
-      <div className="flex items-center gap-2.5 mb-3 px-1">
+      {/* Org picker */}
+      <OrgPicker activeOrgId={activeOrgId} orgs={orgs} onOrgChanged={onOrgChanged} />
+
+      <div className="flex items-center gap-2.5 mb-3 mt-3 px-1">
         <div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-300 to-violet-400 flex items-center justify-center text-xs font-bold text-white shadow-sm">
           {user.email.charAt(0).toUpperCase()}
         </div>
