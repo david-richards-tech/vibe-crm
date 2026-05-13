@@ -1,7 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
+  // Builder apps live at the repo root (no ./src), so the content globs scan
+  // the root entry files plus the conventional folders. Keep this in sync with
+  // the runtime file layout — a missing path here means utility classes used
+  // in those files get purged at build time and the page renders unstyled,
+  // even though it works in the editor preview (which uses Play CDN).
+  content: [
+    "./index.html",
+    "./index.tsx",
+    "./App.tsx",
+    "./components/**/*.{ts,tsx,js,jsx}",
+    "./pages/**/*.{ts,tsx,js,jsx}",
+    "./lib/**/*.{ts,tsx,js,jsx}",
+  ],
   theme: {
     extend: {
       fontFamily: {
