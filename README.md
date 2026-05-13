@@ -1,4 +1,4 @@
-# External App
+# Vibe CRM
 
 This is a standalone Vite + React + TypeScript + Tailwind CSS app. It builds
 and runs anywhere with Node.js installed — no platform-specific tooling
@@ -72,7 +72,7 @@ Install Capacitor and initialise the project:
 
 ```bash
 npm install @capacitor/core @capacitor/cli
-npx cap init "External App" com.example.externalapp --web-dir=dist
+npx cap init "Vibe CRM" com.example.vibecrm --web-dir=dist
 ```
 
 Replace the name and bundle ID with your own. The `--web-dir=dist` flag points
